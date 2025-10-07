@@ -1,0 +1,147 @@
+/* party.css: 編成画面固有のスタイル */
+
+.party-layout {
+    flex-direction: row;
+}
+
+.party-member-list {
+    background-color: var(--discord-bg-medium);
+}
+
+.member-list-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.party-member-card {
+    width: 100px;
+    height: 120px;
+    background-color: var(--discord-bg-dark);
+    border: 2px solid var(--discord-bg-light);
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    cursor: grab;
+    transition: background-color 0.1s, transform 0.1s;
+}
+
+.party-member-card.selected {
+    border-color: var(--discord-accent-blue);
+    background-color: #3f4460;
+}
+
+.party-member-card.in-party {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.party-member-card img {
+    width: 50px;
+    height: 50px;
+    background-color: #555; /* 仮の画像プレースホルダー */
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+.party-member-card h4 {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.party-member-card p {
+    margin: 2px 0 0 0;
+    font-size: 0.8em;
+    color: var(--discord-text-light);
+}
+
+.party-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.party-header {
+    background-color: var(--discord-bg-dark);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    margin: -20px -20px 20px -20px; /* 内部paddingを相殺 */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 戦闘開始ボタンの主張を激しく */
+#startBattleButton.primary-button:not(.disabled) {
+    background-color: var(--discord-yellow);
+    color: #333;
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        box-shadow: 0 0 0 0 rgba(250, 166, 26, 0.7);
+    }
+    to {
+        box-shadow: 0 0 10px 5px rgba(250, 166, 26, 0.4);
+    }
+}
+
+.party-area h2, .member-detail-area h2 {
+    color: var(--discord-text-white);
+    font-size: 1.2em;
+    margin-top: 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--discord-bg-light);
+}
+
+.current-party-slots {
+    min-height: 150px;
+    border: 2px dashed var(--discord-bg-light);
+    background-color: var(--discord-bg-medium);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.current-party-slots .party-member-card {
+    cursor: grab;
+    border: 2px solid var(--discord-green);
+    opacity: 1;
+}
+
+.member-details-box {
+    background-color: var(--discord-bg-medium);
+    border-radius: 5px;
+    padding: 15px;
+    min-height: 200px;
+    color: var(--discord-text-light);
+}
+
+.member-details-box h3 {
+    color: var(--discord-accent-blue);
+    margin-top: 0;
+}
+
+.member-details-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.member-details-box li {
+    background-color: var(--discord-bg-dark);
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.member-details-box .card-effect-summary {
+    color: var(--discord-yellow);
+    font-style: italic;
+}

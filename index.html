@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デッキ構築型ローグライク(仮)</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/party.css">
+    <link rel="stylesheet" href="css/battle.css">
+</head>
+
+<body>
+
+    <div id="titleScreen" class="screen active">
+        <div class="discord-container">
+            <header class="discord-header">
+                <h1>デッキ構築型ローグライク(仮)</h1>
+            </header>
+            <main class="discord-main title-main">
+                <p class="subtitle">あるゲームの丸パクリなのが悔しめ</p>
+                <button id="startCallButton" class="discord-button large-button">通話に行く</button>
+            </main>
+        </div>
+    </div>
+
+    <div id="partyScreen" class="screen">
+        <div class="discord-container party-layout">
+            <div class="discord-sidebar party-member-list">
+                <div class="sidebar-header">メンバー一覧表示</div>
+                <div id="memberList" class="member-list-content">
+                </div>
+            </div>
+
+            <div class="discord-main party-main">
+                <header class="discord-header party-header">
+                    <button id="leaveCallButton" class="discord-button secondary-button">通話を抜ける</button>
+                    <button id="startBattleButton" class="discord-button primary-button disabled" disabled>
+                        通話の時間
+                    </button>
+                </header>
+
+                <div class="party-area">
+                    <h2>今回のメンバー (最大 4/4)</h2>
+                    <div id="currentParty" class="current-party-slots">
+                    </div>
+                </div>
+
+                <div class="member-detail-area">
+                    <h2>メンバーの特徴</h2>
+                    <div id="memberDetails" class="member-details-box">
+                        <p>メンバーを選択またはドラッグしてください。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="battleScreen" class="screen">
+        <div class="discord-container battle-layout">
+            <div class="discord-sidebar battle-sidebar">
+                <div class="sidebar-header">敵情報</div>
+                <div id="enemyArea" class="enemy-area">
+                    <div class="enemy-card">
+                        <h3 id="enemyName">障害（敵）</h3>
+                        <div class="hp-bar-container">
+                            <div id="enemyHPBar" class="hp-bar enemy-hp-bar"></div>
+                        </div>
+                        <div id="enemyNextAction" class="next-action-icon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="discord-main battle-main">
+                <div class="battle-top-bar">
+                    <div id="partyHPContainer" class="hp-bar-container large">
+                        <div id="partyHPBar" class="hp-bar party-hp-bar"></div>
+                        <span id="partyHPText" class="hp-text">HP: 100/100</span>
+                    </div>
+                    <div id="partyBuffs" class="buff-debuff-area">
+                    </div>
+                </div>
+
+                <div class="battle-field">
+                    <div id="partyMembers" class="party-members-row">
+                    </div>
+                </div>
+
+                <div class="battle-bottom-bar">
+                    <div class="cost-area">
+                        <span class="cost-label">コスト:</span>
+                        <span id="currentCost" class="cost-value">5</span>
+                        <span class="cost-value">/ 5</span>
+                    </div>
+
+                    <div class="hand-area">
+                        <div id="handCards" class="card-hand">
+                        </div>
+                    </div>
+
+                    <div class="control-area">
+                        <div class="soul-scream-container">
+                            <div id="soulScreamIcon" class="soul-scream-icon" title="魂の叫び: 0/100">
+                                <span class="scream-label">魂の叫び</span>
+                                <div class="soul-bar-fill" id="soulBarFill"></div>
+                                <span id="soulScreamProgress" class="progress-text">0%</span>
+                            </div>
+                        </div>
+                        <div class="deck-info">
+                            <span id="handCount">手札: 0</span> /
+                            <span id="deckCount">山札: 0</span> /
+                            <span id="discardCount">捨て札: 0</span>
+                        </div>
+                        <button id="endTurnButton" class="discord-button primary-button large-button">ターン終了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="settingsButton" class="settings-button">⚙️</button>
+    </div>
+
+    <script src="js/characters.js"></script>
+    <script src="js/cardEffects.js"></script>
+    <script src="js/enemies.js"></script>
+    <script src="js/carvedSeal.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/party.js"></script>
+    <script src="js/battle.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+/* main.css: Discord風UIと共通のスタイル */
+
+:root {
+    --discord-bg-dark: #36393f; /* メインの背景色 */
+    --discord-bg-medium: #2f3136; /* カードやパネルの背景色 */
+    --discord-bg-light: #40444b; /* ホバーやアクティブな要素 */
+    --discord-text-white: #dcddde; /* 基本のテキスト色 */
+    --discord-text-light: #b9bbbe; /* サブテキスト、詳細 */
+    --discord-accent-blue: #5865f2; /* プライマリボタン、リンク色 */
+    --discord-red: #f04747; /* 危険なアクション、HPバー */
+    --discord-green: #43b581; /* 成功、防御、シールド */
+    --discord-yellow: #faa61a; /* コスト、強調色 */
+
+    --sidebar-width: 240px;
+    --header-height: 50px;
+}
+
+/* 全体設定 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--discord-bg-dark);
+    color: var(--discord-text-white);
+    overflow: hidden; /* 画面遷移時にスクロールバーを防ぐ */
+}
+
+.screen {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Discordコンテナの基本 */
+.discord-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー */
+.discord-header {
+    background-color: var(--discord-bg-dark);
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+    box-sizing: border-box;
+}
+
+.discord-header h1 {
+    font-size: 1.5em;
+    margin: 0;
+    font-weight: 700;
+}
+
+/* サイドバー */
+.discord-sidebar {
+    background-color: var(--discord-bg-medium);
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    font-weight: 600;
+    color: var(--discord-text-light);
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--discord-bg-light);
+}
+
+/* メインコンテンツ */
+.discord-main {
+    flex-grow: 1;
+    background-color: var(--discord-bg-dark);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* タイトル画面固有 */
+.title-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.title-main h1 {
+    font-size: 3em;
+    margin-bottom: 0.5em;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: var(--discord-text-light);
+    margin-bottom: 40px;
+}
+
+/* ボタンの基本スタイル */
+.discord-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.discord-button.primary-button {
+    background-color: var(--discord-accent-blue);
+    color: var(--discord-text-white);
+}
+
+.discord-button.primary-button:hover {
+    background-color: #4752c4;
+}
+
+.discord-button.secondary-button {
+    background-color: var(--discord-bg-light);
+    color: var(--discord-text-white);
+}
+
+.discord-button.secondary-button:hover {
+    background-color: #50555c;
+}
+
+.discord-button.large-button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+}
+
+.discord-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* HPバーの共通スタイル */
+.hp-bar-container {
+    width: 100%;
+    background-color: var(--discord-bg-light);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+    position: relative;
+    height: 15px;
+}
+
+.hp-bar-container.large {
+    height: 25px;
+}
+
+.hp-bar {
+    height: 100%;
+    background-color: var(--discord-red);
+    transition: width 0.3s ease-in-out;
+}
+
+.enemy-hp-bar {
+    background-color: var(--discord-red);
+}
+
+.party-hp-bar {
+    background-color: var(--discord-green);
+}
+
+.hp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--discord-text-white);
+    font-weight: 700;
+    font-size: 0.9em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* カードの基本スタイル */
+.card {
+    background-color: var(--discord-bg-medium);
+    border: 1px solid var(--discord-bg-light);
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative;
+    width: 120px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card-cost {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background-color: var(--discord-yellow);
+    color: #333;
+    font-weight: 900;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--discord-bg-dark);
+    font-size: 1.1em;
+}
+
+.card-name {
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-size: 1em;
+    color: var(--discord-accent-blue);
+}
+
+.card-effect {
+    font-size: 0.85em;
+    color: var(--discord-text-light);
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-carved-seal {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.8em;
+    color: var(--discord-green);
+    font-weight: bold;
+}

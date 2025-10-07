@@ -1,0 +1,314 @@
+/* battle.css: 戦闘画面固有のスタイル */
+
+.battle-layout {
+    flex-direction: row;
+}
+
+.battle-sidebar {
+    background-color: var(--discord-bg-medium);
+}
+
+.battle-main {
+    padding: 0; /* メインコンテンツのpaddingをリセット */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.settings-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: var(--discord-text-white);
+    cursor: pointer;
+    z-index: 100;
+}
+
+/* バトルフィールド全体 */
+.battle-field {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: var(--discord-bg-dark);
+    position: relative;
+}
+
+/* 敵エリア */
+.enemy-area {
+    padding: 10px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.enemy-card {
+    background-color: var(--discord-bg-dark);
+    padding: 15px;
+    border-radius: 5px;
+    width: 80%;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.enemy-card h3 {
+    margin-top: 0;
+    color: var(--discord-red);
+}
+
+.next-action-icon {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background-color: var(--discord-yellow);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: 700;
+    border: 3px solid var(--discord-bg-medium);
+    color: #333;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* パーティーメンバー表示 */
+.party-members-row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: auto;
+}
+
+.battle-member-display {
+    text-align: center;
+    position: relative;
+}
+
+.battle-member-display .member-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--discord-accent-blue);
+    border-radius: 50%;
+    display: inline-block;
+    border: 3px solid var(--discord-bg-light);
+}
+
+.battle-member-display p {
+    margin: 5px 0 0 0;
+    font-size: 0.9em;
+}
+
+.member-shield {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--discord-green);
+    color: var(--discord-text-white);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: 700;
+    border: 2px solid var(--discord-bg-dark);
+}
+
+/* トップバー（HP, バフ） */
+.battle-top-bar {
+    background-color: var(--discord-bg-medium);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.party-members-row {
+    padding-bottom: 100px; /* カード表示エリアと被らないように */
+}
+
+/* バフ/デバフ表示 */
+.buff-debuff-area {
+    display: flex;
+    gap: 5px;
+}
+
+.buff-icon {
+    width: 30px;
+    height: 30px;
+    background-color: var(--discord-bg-light);
+    border-radius: 3px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.buff-icon.buff { background-color: var(--discord-green); }
+.buff-icon.debuff { background-color: var(--discord-red); }
+
+.buff-amount {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background-color: var(--discord-bg-dark);
+    border-radius: 50%;
+    padding: 2px 4px;
+    font-size: 0.7em;
+    line-height: 1;
+    color: var(--discord-text-white);
+    border: 1px solid var(--discord-bg-light);
+}
+
+.buff-duration {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background-color: var(--discord-bg-dark);
+    border-radius: 50%;
+    padding: 2px 4px;
+    font-size: 0.7em;
+    line-height: 1;
+    color: var(--discord-text-white);
+    border: 1px solid var(--discord-bg-light);
+}
+
+/* ボトムバー（コスト、カード、コントロール） */
+.battle-bottom-bar {
+    background-color: var(--discord-bg-medium);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 200px; /* カード表示に十分な高さを確保 */
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.cost-area {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--discord-yellow);
+    flex-basis: 10%;
+    text-align: left;
+}
+
+.hand-area {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.card-hand {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end; /* カードの下端を揃える */
+}
+
+.card.draggable {
+    cursor: grab;
+}
+
+.card.playable {
+    border-color: var(--discord-yellow);
+    box-shadow: 0 0 10px var(--discord-yellow);
+}
+
+.card.playable:hover {
+    transform: translateY(-20px) scale(1.1); /* 持ち上げ感を強調 */
+}
+
+.control-area {
+    flex-basis: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+/* 魂の叫びアイコン */
+.soul-scream-container {
+    width: 100%;
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.soul-scream-icon {
+    background-color: var(--discord-bg-dark);
+    border: 2px solid var(--discord-red);
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.soul-scream-icon.ready {
+    border-color: var(--discord-yellow);
+    box-shadow: 0 0 10px var(--discord-yellow);
+    animation: scream-pulse 0.5s infinite alternate;
+}
+
+@keyframes scream-pulse {
+    from {
+        box-shadow: 0 0 10px var(--discord-yellow);
+    }
+    to {
+        box-shadow: 0 0 15px 5px var(--discord-yellow);
+    }
+}
+
+.soul-bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background-color: var(--discord-red);
+    opacity: 0.5;
+    transition: width 0.3s ease-out;
+}
+
+.soul-scream-icon.ready .soul-bar-fill {
+    background-color: var(--discord-yellow);
+}
+
+.scream-label {
+    position: relative;
+    z-index: 1;
+    font-weight: 700;
+}
+
+.progress-text {
+    position: relative;
+    z-index: 1;
+    font-size: 0.8em;
+    color: var(--discord-text-light);
+}
+
+.deck-info {
+    font-size: 0.9em;
+    color: var(--discord-text-light);
+    margin-right: 5px;
+}
