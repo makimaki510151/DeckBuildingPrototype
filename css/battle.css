@@ -1,282 +1,76 @@
-/* battle.css: 戦闘画面固有のスタイル */
+/* battle.css: 戦闘画面固有のスタイル - 戦闘画面イメージに基づく新デザイン */
 
 .battle-layout {
-    flex-direction: row;
-}
-
-.battle-sidebar {
-    background-color: var(--discord-bg-medium);
-}
-
-.battle-main {
-    padding: 0; /* メインコンテンツのpaddingをリセット */
-    display: flex;
     flex-direction: column;
+    height: 100vh;
     overflow: hidden;
 }
 
-.settings-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 2em;
-    color: var(--discord-text-white);
-    cursor: pointer;
-    z-index: 100;
-}
-
-/* バトルフィールド全体 */
-.battle-field {
-    flex-grow: 1;
+.battle-main {
+    padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    padding: 20px;
-    background-color: var(--discord-bg-dark);
-    position: relative;
+    overflow: hidden;
+    height: 100%;
 }
 
-/* 敵エリア */
-.enemy-area {
+/* 戦闘画面のグリッドレイアウト */
+.battle-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 
+        "soul-scream members-hp enemy-info"
+        "battle-field battle-field battle-field"
+        "cost-area hand-area control-area";
+    height: 100vh;
+    gap: 10px;
     padding: 10px;
-    text-align: center;
-    flex-grow: 1;
+    box-sizing: border-box;
+}
+
+/* 左上エリア: 魂の叫び */
+.soul-scream-area {
+    grid-area: soul-scream;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-}
-
-.enemy-card {
-    background-color: var(--discord-bg-dark);
+    background-color: var(--discord-bg-medium);
+    border-radius: 8px;
     padding: 15px;
-    border-radius: 5px;
-    width: 80%;
-    margin-top: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    position: relative;
+    border: 2px solid var(--discord-bg-light);
 }
 
-.enemy-card h3 {
-    margin-top: 0;
-    color: var(--discord-red);
-}
-
-.next-action-icon {
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    background-color: var(--discord-yellow);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5em;
-    font-weight: 700;
-    border: 3px solid var(--discord-bg-medium);
-    color: #333;
-    z-index: 10;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-}
-
-/* パーティーメンバー表示 */
-.party-members-row {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: auto;
-}
-
-.battle-member-display {
-    text-align: center;
-    position: relative;
-}
-
-.battle-member-display .member-icon {
-    width: 60px;
-    height: 60px;
-    background-color: var(--discord-accent-blue);
-    border-radius: 50%;
-    display: inline-block;
-    border: 3px solid var(--discord-bg-light);
-}
-
-.battle-member-display p {
-    margin: 5px 0 0 0;
-    font-size: 0.9em;
-}
-
-.member-shield {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: var(--discord-green);
-    color: var(--discord-text-white);
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8em;
-    font-weight: 700;
-    border: 2px solid var(--discord-bg-dark);
-}
-
-/* トップバー（HP, バフ） */
-.battle-top-bar {
-    background-color: var(--discord-bg-medium);
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.party-members-row {
-    padding-bottom: 100px; /* カード表示エリアと被らないように */
-}
-
-/* バフ/デバフ表示 */
-.buff-debuff-area {
-    display: flex;
-    gap: 5px;
-}
-
-.buff-icon {
-    width: 30px;
-    height: 30px;
-    background-color: var(--discord-bg-light);
-    border-radius: 3px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2em;
-    font-weight: 700;
-}
-
-.buff-icon.buff { background-color: var(--discord-green); }
-.buff-icon.debuff { background-color: var(--discord-red); }
-
-.buff-amount {
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    background-color: var(--discord-bg-dark);
-    border-radius: 50%;
-    padding: 2px 4px;
-    font-size: 0.7em;
-    line-height: 1;
-    color: var(--discord-text-white);
-    border: 1px solid var(--discord-bg-light);
-}
-
-.buff-duration {
-    position: absolute;
-    bottom: -5px;
-    right: -5px;
-    background-color: var(--discord-bg-dark);
-    border-radius: 50%;
-    padding: 2px 4px;
-    font-size: 0.7em;
-    line-height: 1;
-    color: var(--discord-text-white);
-    border: 1px solid var(--discord-bg-light);
-}
-
-/* ボトムバー（コスト、カード、コントロール） */
-.battle-bottom-bar {
-    background-color: var(--discord-bg-medium);
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 200px; /* カード表示に十分な高さを確保 */
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.cost-area {
-    font-size: 1.5em;
-    font-weight: 700;
-    color: var(--discord-yellow);
-    flex-basis: 10%;
-    text-align: left;
-}
-
-.hand-area {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.card-hand {
-    display: flex;
-    gap: 15px;
-    align-items: flex-end; /* カードの下端を揃える */
-}
-
-.card.draggable {
-    cursor: grab;
-}
-
-.card.playable {
-    border-color: var(--discord-yellow);
-    box-shadow: 0 0 10px var(--discord-yellow);
-}
-
-.card.playable:hover {
-    transform: translateY(-20px) scale(1.1); /* 持ち上げ感を強調 */
-}
-
-.control-area {
-    flex-basis: 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
-}
-
-/* 魂の叫びアイコン */
 .soul-scream-container {
-    width: 100%;
-    max-width: 150px;
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .soul-scream-icon {
     background-color: var(--discord-bg-dark);
     border: 2px solid var(--discord-red);
-    border-radius: 5px;
-    padding: 5px;
-    text-align: center;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    height: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    transition: all 0.3s ease;
 }
 
 .soul-scream-icon.ready {
     border-color: var(--discord-yellow);
-    box-shadow: 0 0 10px var(--discord-yellow);
-    animation: scream-pulse 0.5s infinite alternate;
+    box-shadow: 0 0 15px var(--discord-yellow);
+    animation: scream-pulse 1s infinite alternate;
 }
 
 @keyframes scream-pulse {
-    from {
-        box-shadow: 0 0 10px var(--discord-yellow);
-    }
-    to {
-        box-shadow: 0 0 15px 5px var(--discord-yellow);
-    }
+    from { box-shadow: 0 0 15px var(--discord-yellow); }
+    to { box-shadow: 0 0 25px 5px var(--discord-yellow); }
 }
 
 .soul-bar-fill {
@@ -286,7 +80,7 @@
     height: 100%;
     width: 0%;
     background-color: var(--discord-red);
-    opacity: 0.5;
+    opacity: 0.6;
     transition: width 0.3s ease-out;
 }
 
@@ -298,17 +92,519 @@
     position: relative;
     z-index: 1;
     font-weight: 700;
+    font-size: 0.8em;
+    text-align: center;
 }
 
 .progress-text {
     position: relative;
     z-index: 1;
+    font-size: 0.7em;
+    color: var(--discord-text-light);
+}
+
+/* 上部中央エリア: メンバーたち&HPバー */
+.members-hp-area {
+    grid-area: members-hp;
+    background-color: var(--discord-bg-medium);
+    border-radius: 8px;
+    padding: 15px;
+    border: 2px solid var(--discord-bg-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.members-avatars {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--discord-accent-blue);
+    border: 3px solid var(--discord-bg-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-shield {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--discord-green);
+    color: var(--discord-text-white);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7em;
+    font-weight: 700;
+    border: 2px solid var(--discord-bg-dark);
+}
+
+.party-hp-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.hp-bar-container {
+    width: 100%;
+    background-color: var(--discord-bg-light);
+    border-radius: 4px;
+    overflow: hidden;
+    height: 20px;
+    position: relative;
+}
+
+.hp-bar {
+    height: 100%;
+    background-color: var(--discord-green);
+    transition: width 0.3s ease-in-out;
+}
+
+.hp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--discord-text-white);
+    font-weight: 700;
+    font-size: 0.9em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* 右上エリア: 障害（敵）情報 */
+.enemy-info-area {
+    grid-area: enemy-info;
+    background-color: var(--discord-bg-medium);
+    border-radius: 8px;
+    padding: 15px;
+    border: 2px solid var(--discord-bg-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.enemy-card {
+    background-color: var(--discord-bg-dark);
+    padding: 15px;
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.enemy-card h3 {
+    margin: 0 0 10px 0;
+    color: var(--discord-red);
+    font-size: 1.1em;
+}
+
+.enemy-hp-container {
+    width: 100%;
+}
+
+.enemy-hp-bar {
+    background-color: var(--discord-red);
+}
+
+.next-action-icon {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background-color: var(--discord-yellow);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    font-weight: 700;
+    border: 3px solid var(--discord-bg-medium);
+    color: #333;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.settings-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--discord-bg-dark);
+    border: 2px solid var(--discord-bg-light);
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 1.2em;
+    color: var(--discord-text-white);
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.2s ease;
+}
+
+.settings-button:hover {
+    background-color: var(--discord-bg-light);
+    border-color: var(--discord-accent-blue);
+}
+
+/* 中央エリア: 戦闘フィールド */
+.battle-field {
+    grid-area: battle-field;
+    background: linear-gradient(135deg, #2c2f33 0%, #23272a 100%);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border: 2px solid var(--discord-bg-light);
+    min-height: 300px;
+}
+
+.enemy-battle-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+}
+
+.enemy-display {
+    background-color: rgba(47, 49, 54, 0.8);
+    border: 2px solid var(--discord-red);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(5px);
+}
+
+.party-battle-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.battle-member-display {
+    text-align: center;
+    position: relative;
+    background-color: rgba(47, 49, 54, 0.6);
+    border: 2px solid var(--discord-accent-blue);
+    border-radius: 12px;
+    padding: 15px;
+    backdrop-filter: blur(3px);
+}
+
+.battle-member-display .member-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--discord-accent-blue);
+    border-radius: 50%;
+    border: 3px solid var(--discord-bg-light);
+    margin-bottom: 8px;
+}
+
+.battle-member-display p {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--discord-text-white);
+    font-weight: 600;
+}
+
+/* 左下エリア: コスト */
+.cost-area {
+    grid-area: cost-area;
+    background-color: var(--discord-bg-medium);
+    border-radius: 8px;
+    padding: 20px;
+    border: 2px solid var(--discord-bg-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cost-display {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--discord-yellow);
+    text-align: center;
+}
+
+.cost-label {
+    font-size: 1em;
+    color: var(--discord-text-light);
+    font-weight: 600;
+}
+
+/* 中央下エリア: カード手札 */
+.hand-area {
+    grid-area: hand-area;
+    background-color: var(--discord-bg-medium);
+    border-radius: 8px;
+    padding: 15px;
+    border: 2px solid var(--discord-bg-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+}
+
+.card-hand {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    padding: 5px;
+}
+
+.card {
+    background-color: var(--discord-bg-dark);
+    border: 2px solid var(--discord-bg-light);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    width: 120px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    border-color: var(--discord-accent-blue);
+}
+
+.card.playable {
+    border-color: var(--discord-yellow);
+    box-shadow: 0 0 15px rgba(250, 166, 26, 0.5);
+}
+
+.card.playable:hover {
+    transform: translateY(-15px) scale(1.1);
+    box-shadow: 0 0 20px rgba(250, 166, 26, 0.7);
+}
+
+.card-cost {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background-color: var(--discord-yellow);
+    color: #333;
+    font-weight: 900;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--discord-bg-dark);
+    font-size: 1.1em;
+}
+
+.card-name {
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: var(--discord-accent-blue);
+}
+
+.card-effect {
     font-size: 0.8em;
     color: var(--discord-text-light);
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* 右下エリア: コントロール */
+.control-area {
+    grid-area: control-area;
+    background-color: var(--discord-bg-medium);
+    border-radius: 8px;
+    padding: 15px;
+    border: 2px solid var(--discord-bg-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
 .deck-info {
     font-size: 0.9em;
     color: var(--discord-text-light);
-    margin-right: 5px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.end-turn-button {
+    background-color: var(--discord-accent-blue);
+    color: var(--discord-text-white);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1em;
+    min-width: 120px;
+}
+
+.end-turn-button:hover {
+    background-color: #4752c4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.end-turn-button:active {
+    transform: translateY(0);
+}
+
+/* バフ/デバフ表示 */
+.buff-debuff-area {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.buff-icon {
+    width: 30px;
+    height: 30px;
+    background-color: var(--discord-bg-light);
+    border-radius: 6px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    font-weight: 700;
+    border: 2px solid transparent;
+}
+
+.buff-icon.buff { 
+    background-color: var(--discord-green);
+    border-color: #2d7d32;
+}
+
+.buff-icon.debuff { 
+    background-color: var(--discord-red);
+    border-color: #c62828;
+}
+
+.buff-amount {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background-color: var(--discord-bg-dark);
+    border-radius: 50%;
+    padding: 2px 4px;
+    font-size: 0.7em;
+    line-height: 1;
+    color: var(--discord-text-white);
+    border: 1px solid var(--discord-bg-light);
+    min-width: 16px;
+    text-align: center;
+}
+
+.buff-duration {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    background-color: var(--discord-bg-dark);
+    border-radius: 50%;
+    padding: 2px 4px;
+    font-size: 0.7em;
+    line-height: 1;
+    color: var(--discord-text-white);
+    border: 1px solid var(--discord-bg-light);
+    min-width: 16px;
+    text-align: center;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 1200px) {
+    .battle-grid {
+        grid-template-columns: 1fr 1.5fr 1fr;
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    .card {
+        width: 100px;
+        height: 140px;
+    }
+    
+    .member-avatar {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 900px) {
+    .battle-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-areas: 
+            "soul-scream"
+            "members-hp"
+            "battle-field"
+            "hand-area";
+    }
+    
+    .enemy-info-area {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 200px;
+        z-index: 50;
+    }
+    
+    .cost-area,
+    .control-area {
+        position: absolute;
+        bottom: 10px;
+        width: 150px;
+        z-index: 50;
+    }
+    
+    .cost-area {
+        left: 10px;
+    }
+    
+    .control-area {
+        right: 10px;
+    }
 }

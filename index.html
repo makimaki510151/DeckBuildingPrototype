@@ -58,48 +58,10 @@
 
     <div id="battleScreen" class="screen">
         <div class="discord-container battle-layout">
-            <div class="discord-sidebar battle-sidebar">
-                <div class="sidebar-header">敵情報</div>
-                <div id="enemyArea" class="enemy-area">
-                    <div class="enemy-card">
-                        <h3 id="enemyName">障害（敵）</h3>
-                        <div class="hp-bar-container">
-                            <div id="enemyHPBar" class="hp-bar enemy-hp-bar"></div>
-                        </div>
-                        <div id="enemyNextAction" class="next-action-icon">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="discord-main battle-main">
-                <div class="battle-top-bar">
-                    <div id="partyHPContainer" class="hp-bar-container large">
-                        <div id="partyHPBar" class="hp-bar party-hp-bar"></div>
-                        <span id="partyHPText" class="hp-text">HP: 100/100</span>
-                    </div>
-                    <div id="partyBuffs" class="buff-debuff-area">
-                    </div>
-                </div>
-
-                <div class="battle-field">
-                    <div id="partyMembers" class="party-members-row">
-                    </div>
-                </div>
-
-                <div class="battle-bottom-bar">
-                    <div class="cost-area">
-                        <span class="cost-label">コスト:</span>
-                        <span id="currentCost" class="cost-value">5</span>
-                        <span class="cost-value">/ 5</span>
-                    </div>
-
-                    <div class="hand-area">
-                        <div id="handCards" class="card-hand">
-                        </div>
-                    </div>
-
-                    <div class="control-area">
+                <div class="battle-grid">
+                    <!-- 左上エリア: 魂の叫び -->
+                    <div class="soul-scream-area">
                         <div class="soul-scream-container">
                             <div id="soulScreamIcon" class="soul-scream-icon" title="魂の叫び: 0/100">
                                 <span class="scream-label">魂の叫び</span>
@@ -107,17 +69,80 @@
                                 <span id="soulScreamProgress" class="progress-text">0%</span>
                             </div>
                         </div>
-                        <div class="deck-info">
-                            <span id="handCount">手札: 0</span> /
-                            <span id="deckCount">山札: 0</span> /
-                            <span id="discardCount">捨て札: 0</span>
+                    </div>
+
+                    <!-- 上部中央エリア: メンバーたち&HPバー -->
+                    <div class="members-hp-area">
+                        <div class="members-avatars" id="membersAvatars">
+                            <!-- パーティーメンバーのアバターがここに表示される -->
                         </div>
-                        <button id="endTurnButton" class="discord-button primary-button large-button">ターン終了</button>
+                        <div class="party-hp-container">
+                            <div class="hp-bar-container">
+                                <div id="partyHPBar" class="hp-bar"></div>
+                                <span id="partyHPText" class="hp-text">HP: 100/100</span>
+                            </div>
+                            <div id="partyBuffs" class="buff-debuff-area">
+                                <!-- バフ/デバフアイコンがここに表示される -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右上エリア: 障害（敵）情報 -->
+                    <div class="enemy-info-area">
+                        <div class="enemy-card">
+                            <h3 id="enemyName">障害（敵）</h3>
+                            <div class="enemy-hp-container">
+                                <div class="hp-bar-container">
+                                    <div id="enemyHPBar" class="hp-bar enemy-hp-bar"></div>
+                                    <span id="enemyHPText" class="hp-text">HP: 100/100</span>
+                                </div>
+                            </div>
+                            <div id="enemyNextAction" class="next-action-icon">
+                                <!-- 敵の次の行動アイコン -->
+                            </div>
+                        </div>
+                        <button id="settingsButton" class="settings-button">⚙️</button>
+                    </div>
+
+                    <!-- 中央エリア: 戦闘フィールド -->
+                    <div class="battle-field">
+                        <div class="enemy-battle-area">
+                            <div class="enemy-display" id="enemyDisplay">
+                                <!-- 敵の戦闘表示 -->
+                            </div>
+                        </div>
+                        <div class="party-battle-area" id="partyMembers">
+                            <!-- パーティーメンバーの戦闘表示 -->
+                        </div>
+                    </div>
+
+                    <!-- 左下エリア: コスト -->
+                    <div class="cost-area">
+                        <div class="cost-label">コスト</div>
+                        <div class="cost-display">
+                            <span id="currentCost">5</span>
+                            <span style="font-size: 0.7em; color: var(--discord-text-light);">/ 5</span>
+                        </div>
+                    </div>
+
+                    <!-- 中央下エリア: カード手札 -->
+                    <div class="hand-area">
+                        <div id="handCards" class="card-hand">
+                            <!-- カードがここに表示される -->
+                        </div>
+                    </div>
+
+                    <!-- 右下エリア: コントロール -->
+                    <div class="control-area">
+                        <div class="deck-info">
+                            <div>手札数: <span id="handCount">5</span>/10</div>
+                            <div>デッキ枚数: <span id="deckCount">12</span></div>
+                        </div>
+                        <button id="endTurnButton" class="end-turn-button">終了</button>
                     </div>
                 </div>
             </div>
         </div>
-        <button id="settingsButton" class="settings-button">⚙️</button>
     </div>
 
     <script src="js/characters.js"></script>

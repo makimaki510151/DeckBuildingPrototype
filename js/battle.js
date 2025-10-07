@@ -1,4 +1,4 @@
-// battle.js: 戦闘画面のロジック、ゲームサイクル、カード処理
+// battle.js: 戦闘画面のロジック - 新しいUIレイアウトに対応
 
 const partyHPBar = document.getElementById('partyHPBar');
 const partyHPText = document.getElementById('partyHPText');
@@ -10,12 +10,14 @@ const soulBarFill = document.getElementById('soulBarFill');
 const soulScreamProgress = document.getElementById('soulScreamProgress');
 const endTurnButton = document.getElementById('endTurnButton');
 const enemyHPBar = document.getElementById('enemyHPBar');
+const enemyHPText = document.getElementById('enemyHPText');
 const enemyNameH3 = document.getElementById('enemyName');
 const enemyNextActionDiv = document.getElementById('enemyNextAction');
 const partyMembersDiv = document.getElementById('partyMembers');
+const membersAvatarsDiv = document.getElementById('membersAvatars');
+const enemyDisplayDiv = document.getElementById('enemyDisplay');
 const handCountSpan = document.getElementById('handCount');
 const deckCountSpan = document.getElementById('deckCount');
-const discardCountSpan = document.getElementById('discardCount');
 
 // 敵の状態
 let currentEnemy = null;
@@ -48,19 +50,19 @@ game.damageEnemy = (baseDamage) => {
 };
 
 game.takeDamage = (baseDamage) => {
-    let damage = Math.max(0, baseDamage - game.partyState.buffs.防御強化);
+    let damage = Math.max(0, baseDamage);
     
+    // シールドで軽減
     if (game.partyState.shield > 0) {
-        const takenFromShield = Math.min(damage, game.partyState.shield);
-        game.partyState.shield -= takenFromShield;
-        damage -= takenFromShield;
+        const shieldReduction = Math.min(damage, game.partyState.shield);
+        damage -= shieldReduction;
+        game.partyState.shield -= shieldReduction;
     }
     
-    if (damage > 0) {
-        game.partyState.currentHP -= damage;
-        // 攻撃を受ける毎に魂の震えが全キャラ1溜まる (4体入れば合計4溜まる)
-        game.addSoulCharge(game.party.length);
-    }
+    game.partyState.currentHP = Math.max(0, game.partyState.currentHP - damage);
+    
+    // 魂の叫び獲得（受けたダメージに応じて）
+    game.addSoulCharge(Math.floor(damage / 5)); // 5ダメージごとに1%
     
     updateUI();
     if (game.partyState.currentHP <= 0) {
@@ -68,29 +70,11 @@ game.takeDamage = (baseDamage) => {
     }
 };
 
-game.addBuff = (name, amount, duration) => {
-    if (!game.partyState.buffs[name]) game.partyState.buffs[name] = 0;
-    game.partyState.buffs[name] += amount;
-    
-    // durationがnullの場合は永続
-    if (duration !== null) {
-        if (!game.partyState.buffs.durations) game.partyState.buffs.durations = {};
-        if (!game.partyState.buffs.durations[name]) game.partyState.buffs.durations[name] = 0;
-        game.partyState.buffs.durations[name] += duration;
-    } else {
-        // 永続バフは duration を持たない
-    }
-    updateUI();
-};
-
 game.addEnemyDebuff = (name, amount, duration) => {
-    if (!enemyState.buffs[name]) enemyState.buffs[name] = 0;
-    enemyState.buffs[name] += amount;
-    
+    enemyState.buffs[name] = (enemyState.buffs[name] || 0) + amount;
     if (duration !== null) {
         if (!enemyState.buffs.durations) enemyState.buffs.durations = {};
-        if (!enemyState.buffs.durations[name]) enemyState.buffs.durations[name] = 0;
-        enemyState.buffs.durations[name] += duration;
+        enemyState.buffs.durations[name] = duration;
     }
     updateUI();
 };
@@ -98,6 +82,17 @@ game.addEnemyDebuff = (name, amount, duration) => {
 game.addSoulCharge = (amount) => {
     game.partyState.soulCharge = Math.min(100, game.partyState.soulCharge + amount);
     updateUI();
+};
+
+const shuffleDeck = () => {
+    game.gameState.deck = [...game.gameState.discard];
+    game.gameState.discard = [];
+    
+    // シャッフル
+    for (let i = game.gameState.deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [game.gameState.deck[i], game.gameState.deck[j]] = [game.gameState.deck[j], game.gameState.deck[i]];
+    }
 };
 
 game.drawCards = (count) => {
@@ -133,9 +128,13 @@ const updateUI = () => {
     if (currentEnemy) {
         const enemyPercent = (enemyState.currentHP / enemyState.maxHP) * 100;
         enemyHPBar.style.width = `${enemyPercent}%`;
+        enemyHPText.textContent = `HP: ${enemyState.currentHP}/${enemyState.maxHP}`;
         
         // 敵の次の行動アイコン
         renderEnemyNextAction();
+        
+        // 敵の戦闘表示を更新
+        renderEnemyDisplay();
     }
     
     // コスト
@@ -148,9 +147,8 @@ const updateUI = () => {
     soulScreamIcon.classList.toggle('ready', game.partyState.soulCharge === 100);
 
     // デッキ情報
-    handCountSpan.textContent = `手札: ${game.gameState.hand.length}`;
-    deckCountSpan.textContent = `山札: ${game.gameState.deck.length}`;
-    discardCountSpan.textContent = `捨て札: ${game.gameState.discard.length}`;
+    handCountSpan.textContent = game.gameState.hand.length;
+    deckCountSpan.textContent = game.gameState.deck.length;
 
     // バフ/デバフ
     renderBuffsDebuffs();
@@ -158,8 +156,81 @@ const updateUI = () => {
     // カード
     renderHandCards();
     
-    // シールド
-    renderPartyShield();
+    // メンバーアバター表示
+    renderMembersAvatars();
+    
+    // パーティーメンバー戦闘表示
+    renderPartyMembers();
+};
+
+// メンバーアバター表示（上部中央エリア）
+const renderMembersAvatars = () => {
+    membersAvatarsDiv.innerHTML = '';
+    game.party.forEach(charId => {
+        const char = ALL_CHARACTERS.find(c => c.id === charId);
+        const avatar = document.createElement('div');
+        avatar.className = 'member-avatar';
+        avatar.style.backgroundColor = `hsl(${char.maxHP * 5}, 70%, 50%)`;
+        avatar.title = char.name;
+        
+        // シールドがある場合は表示
+        if (game.partyState.shield > 0) {
+            const shield = document.createElement('div');
+            shield.className = 'member-shield';
+            shield.textContent = Math.floor(game.partyState.shield / game.party.length);
+            avatar.appendChild(shield);
+        }
+        
+        membersAvatarsDiv.appendChild(avatar);
+    });
+};
+
+// パーティーメンバー戦闘表示（中央戦闘フィールド）
+const renderPartyMembers = () => {
+    partyMembersDiv.innerHTML = '';
+    game.party.forEach(charId => {
+        const char = ALL_CHARACTERS.find(c => c.id === charId);
+        const memberDisplay = document.createElement('div');
+        memberDisplay.className = 'battle-member-display';
+        memberDisplay.innerHTML = `
+            <div class="member-icon" style="background-color: hsl(${char.maxHP * 5}, 70%, 50%);"></div>
+            <p>${char.name}</p>
+        `;
+        
+        // シールドがある場合は表示
+        if (game.partyState.shield > 0) {
+            const shield = document.createElement('div');
+            shield.className = 'member-shield';
+            shield.textContent = Math.floor(game.partyState.shield / game.party.length);
+            memberDisplay.querySelector('.member-icon').appendChild(shield);
+        }
+        
+        partyMembersDiv.appendChild(memberDisplay);
+    });
+};
+
+// 敵の戦闘表示
+const renderEnemyDisplay = () => {
+    if (!currentEnemy) return;
+    
+    enemyDisplayDiv.innerHTML = `
+        <h3 style="color: var(--discord-red); margin: 0 0 10px 0;">${currentEnemy.name}</h3>
+        <div style="font-size: 0.9em; color: var(--discord-text-light);">
+            HP: ${enemyState.currentHP}/${enemyState.maxHP}
+        </div>
+        <div style="margin-top: 10px; font-size: 0.8em; color: var(--discord-yellow);">
+            次の行動: ${getNextActionDescription()}
+        </div>
+    `;
+};
+
+// 次の行動の説明を取得
+const getNextActionDescription = () => {
+    const action = currentEnemy.actions[enemyState.nextActionIndex];
+    if (!action) return '不明';
+    
+    const actionType = ENEMY_ACTIONS[action.type];
+    return actionType.desc(action.value);
 };
 
 // 敵の次の行動アイコン表示
@@ -337,31 +408,17 @@ const renderBuffsDebuffs = () => {
             partyBuffsContainer.appendChild(icon);
         }
     });
+    
+    // シールド表示
+    if (game.partyState.shield > 0) {
+        const shieldIcon = document.createElement('div');
+        shieldIcon.className = 'buff-icon buff';
+        shieldIcon.title = `シールド: ${game.partyState.shield}`;
+        shieldIcon.innerHTML = '🛡️';
+        shieldIcon.innerHTML += `<span class="buff-amount">${game.partyState.shield}</span>`;
+        partyBuffsContainer.appendChild(shieldIcon);
+    }
 };
-
-// パーティーシールドの描画 (HPバーと分けて)
-const renderPartyShield = () => {
-    // メンバーごとのシールド表示は今回はスキップし、合計シールドをどこかに表示
-    // 簡易化のため、シールドはHPバーの下にテキストとして表示する
-    const shieldText = document.createElement('span');
-    shieldText.textContent = `🛡️ シールド: ${game.partyState.shield}`;
-    shieldText.style.cssText = 'font-weight: 700; color: var(--discord-green); margin-left: 20px;';
-    partyHPText.parentNode.insertBefore(shieldText, partyHPText.nextSibling);
-
-    // メンバー表示エリアにもシールド値を表示 (簡易)
-    partyMembersDiv.innerHTML = '';
-    game.party.forEach(charId => {
-        const char = ALL_CHARACTERS.find(c => c.id === charId);
-        const memberDisplay = document.createElement('div');
-        memberDisplay.className = 'battle-member-display';
-        memberDisplay.innerHTML = `
-            <div class="member-icon" style="background-color: hsl(${char.maxHP * 5}, 70%, 50%);"></div>
-            <p>${char.name}</p>
-        `;
-        partyMembersDiv.appendChild(memberDisplay);
-    });
-};
-
 
 // 戦闘開始
 const startBattle = () => {
